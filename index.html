@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <title>💖 Întrebare importantă 💖</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        background-image: url("background.png");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 16px;
+        text-align: center;
+        width: 600px;
+        max-width: 90vw;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .card img {
+        width: 100%;
+        border-radius: 12px;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      button {
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        padding: 12px 20px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      #yesBtn {
+        background-color: green;
+        color: white;
+        flex: 1;
+      }
+
+      #noBtn {
+        background-color: red;
+        color: white;
+        flex: 1;
+      }
+
+      .hidden {
+        display: none;
+      }
+      .image-wrapper {
+        position: relative;
+        width: 100%;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      .image-wrapper img {
+        width: 100%;
+        border-radius: 12px;
+      }
+
+      .image-text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        padding: 32px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <button id="langBtn" style="margin-bottom: 15px">🇬🇧 English</button>
+      <div class="image-wrapper">
+        <img id="mainImage" src="blackcat.jpg" alt="love" />
+        <div class="image-text" id="question">Vrei să fii valentina mea?</div>
+      </div>
+      <h2 id="othertext"></h2>
+
+      <div class="buttons" id="buttons">
+        <button id="yesBtn">DA</button>
+        <button id="noBtn">NU</button>
+      </div>
+    </div>
+
+    <script>
+      let currentLang = "ro";
+
+      const texts = {
+        ro: {
+          question: "Vrei să fii valentina mea?",
+          yes: "DA",
+          no: "NU",
+          noTexts: [
+            "Sigur nu dorești?",
+            "Ești sigură că nu dorești?",
+            "O să fiu foarte trist dacă nu apeși pe DA",
+          ],
+          success: "💖 Știam eu! 💖",
+          langBtn: "🇬🇧 English",
+        },
+        en: {
+          question: "Will you be my Valentine?",
+          yes: "YES",
+          no: "NO",
+          noTexts: [
+            "Are you sure?",
+            "Are you really sure?",
+            "I will be very sad if you don't press YES",
+          ],
+          success: "💖 I knew it! 💖",
+          langBtn: "🇷🇴 Română",
+        },
+      };
+      const question = document.getElementById("question");
+      const othertext = document.getElementById("othertext");
+      const noBtn = document.getElementById("noBtn");
+      const yesBtn = document.getElementById("yesBtn");
+      const buttons = document.getElementById("buttons");
+      const mainImage = document.getElementById("mainImage");
+      const langBtn = document.getElementById("langBtn");
+      const noTexts = [
+        "Sigur nu dorești?",
+        "Ești sigură că nu dorești?",
+        "O să fiu foarte trist dacă nu apeși pe DA",
+      ];
+
+      let noClickCount = 0;
+      function updateLanguage() {
+        const t = texts[currentLang];
+
+        question.textContent = t.question;
+        yesBtn.textContent = t.yes;
+        noBtn.textContent = t.no;
+        othertext.textContent = "";
+        noClickCount = 0;
+
+        noBtn.classList.remove("hidden");
+        buttons.classList.remove("hidden");
+
+        langBtn.textContent = t.langBtn;
+      }
+      langBtn.addEventListener("click", () => {
+        currentLang = currentLang === "ro" ? "en" : "ro";
+        updateLanguage();
+      });
+
+      noBtn.addEventListener("click", () => {
+        if (noClickCount < noTexts.length) {
+          othertext.textContent = texts[currentLang].noTexts[noClickCount];
+          noClickCount++;
+
+          noBtn.style.flex = "0.6";
+          yesBtn.style.flex = "1.4";
+        } else {
+          noBtn.classList.add("hidden");
+          yesBtn.style.flex = "1";
+        }
+      });
+
+      yesBtn.addEventListener("click", () => {
+        question.textContent = texts[currentLang].success;
+        mainImage.src = "blackcatlabrador.jpeg";
+
+        othertext.classList.add("hidden");
+        buttons.classList.add("hidden");
+      });
+    </script>
+  </body>
+</html>
